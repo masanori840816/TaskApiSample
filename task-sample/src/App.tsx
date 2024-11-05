@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <div className="w-screen h-screen flex flex-col items-center justify-center">
-        <div className="w-[86%] h-[90%] bg-[green]">
+        <div className="w-[86%] h-[70%] bg-[green]">
           <AppUserProvider>
             <Router>
               <Link to="/">TOP</Link>
