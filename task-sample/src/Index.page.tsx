@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react"
+import "./Index.page.css";
 import { AppUserContext } from "./users/appUserContext"
 
 export function IndexPage(): JSX.Element {

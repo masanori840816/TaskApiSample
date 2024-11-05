@@ -16,7 +16,7 @@ const AppUserProvider: React.FC<AppUserProviderProps> = ({children}) => {
                 }
             })
             .catch(err => console.error(err));
-    }, []);
+    }, [appUser]);
     return <AppUserContext.Provider value={appUser}>
         {children}
     </AppUserContext.Provider>;

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { IndexPage } from "./Index.page";
 import { AppUserProvider } from "./users/AppUserProvider";
+import { CreatePage } from "./tasks/Create.page";
 
 function App() {
   return (
@@ -16,8 +17,10 @@ function App() {
           <AppUserProvider>
             <Router>
               <Link to="/">TOP</Link>
+              <Link to="/create">Create</Link>
               <Routes>
                 <Route path="/" element={<IndexPage />} />
+                <Route path="/create" element={<CreatePage />} />
               </Routes>
             </Router>
           </AppUserProvider>
