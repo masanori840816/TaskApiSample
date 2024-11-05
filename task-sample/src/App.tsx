@@ -5,7 +5,7 @@ import {
   Routes,
   Link
 } from "react-router-dom";
-import { IndexPage } from "./IndexPage";
+import { IndexPage } from "./Index.page";
 import { AppUserProvider } from "./users/AppUserProvider";
 
 function App() {

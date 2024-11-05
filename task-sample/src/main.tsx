@@ -1,13 +1,10 @@
-import { useContext, useEffect } from "react"
-import { AppUserContext } from "./users/appUserContext"
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
 
-export function IndexPage(): JSX.Element {
-    const appUsers = useContext(AppUserContext);
-    useEffect(() => {
-        console.log("indexpage ");
-    }, []);
-    return <div>
-        <h1>Hello World!</h1>
-        <div>{appUsers?.name ?? ""}</div>
-    </div>
-}
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
