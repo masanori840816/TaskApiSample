@@ -12,7 +12,7 @@ import { CreatePage } from "./tasks/Create.page";
 function App() {
   return (
     <>
-      <div className="w-full h-screen flex flex-col items-center justify-center">
+      <div className="w-screen h-screen flex flex-col items-center justify-center">
         <div className="w-[86%] h-[90%] bg-[green]">
           <AppUserProvider>
             <Router>
