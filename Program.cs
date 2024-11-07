@@ -1,5 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using TaskApiSample;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
+builder.Services.AddDbContext<OurTaskContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("OurTasks")));
+
 const string AllowedOrigins = "AllowedOrigins";
 builder.Services.AddCors(options =>
     {
