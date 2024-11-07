@@ -16,6 +16,6 @@ public record Task
 
     [Column("notes")]
     public required string Notes { get; init; }
-    [Column(TypeName="timestamp with time zone")]
-    public required DateTime LastUpdateDate { get; init; }
+    [Column(TypeName="datetimeoffset")]
+    public required DateTimeOffset LastUpdateDate { get; init; }
 }

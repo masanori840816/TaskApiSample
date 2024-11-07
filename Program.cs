@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using TaskApiSample;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Console.WriteLine(builder.Configuration.GetConnectionString("OurTasks"));
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OurTaskContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("OurTasks")));
