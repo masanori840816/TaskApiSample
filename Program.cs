@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskApiSample;
+using TaskApiSample.AppUsers;
 
 var builder = WebApplication.CreateBuilder(args);
-
-Console.WriteLine(builder.Configuration.GetConnectionString("OurTasks"));
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OurTaskContext>(options =>
@@ -20,10 +20,15 @@ builder.Services.AddCors(options =>
                        .AllowAnyMethod(); // メソッドの許可
             });
     });
+builder.Services.AddIdentity<AppUser, IdentityRole<long>>()
+                .AddEntityFrameworkStores<OurTaskContext>()
+                .AddDefaultTokenProviders();
 
 var app = builder.Build();
 app.UseCors(AllowedOrigins);
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();
