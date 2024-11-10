@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TaskApiSample.AppUsers;
+using TaskApiSample.AppUsers.Models;
 
 namespace TaskApiSample;
 

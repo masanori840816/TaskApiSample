@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskApiSample;
 using TaskApiSample.AppUsers;
+using TaskApiSample.AppUsers.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

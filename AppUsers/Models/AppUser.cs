@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using TaskApiSample.AppUsers.DTO;
 
-namespace TaskApiSample.AppUsers;
+namespace TaskApiSample.AppUsers.Models;
 
 [Table("app_user")]
 public class AppUser: IdentityUser<long>
@@ -11,7 +12,7 @@ public class AppUser: IdentityUser<long>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
     [PersonalData]
-    public override required long Id { get; set; } = default!;
+    public override long Id { get; set; } = default!;
 
     [ProtectedPersonalData]
     [Column("user_name")]
@@ -62,4 +63,33 @@ public class AppUser: IdentityUser<long>
 
     [NotMapped]
     public override int AccessFailedCount { get; set; }
+
+    public string Validate()
+    {
+        if(string.IsNullOrEmpty(UserName))
+        {
+            return "User name is required";
+        }
+        if(string.IsNullOrEmpty(Email))
+        {
+            return "Email is required";
+        }
+        if(string.IsNullOrEmpty(PasswordHash))
+        {
+            return "Password is required";
+        }
+        return "";
+    }
+    public static AppUser Create(RegistrationAppUser user)
+    {
+        AppUser newUser = new()
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+            LastUpdateDate = DateTime.Now,
+        };
+        newUser.PasswordHash = new PasswordHasher<AppUser>()
+                .HashPassword(newUser, user.Password);
+        return newUser;
+    }
 }
