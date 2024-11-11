@@ -16,17 +16,17 @@ public class AppUser: IdentityUser<long>
 
     [ProtectedPersonalData]
     [Column("user_name")]
-    public override required string? UserName { get; set; }
+    public override string? UserName { get; set; }
 
     [ProtectedPersonalData]
     [Column("email")]
-    public override required string? Email { get; set; }
+    public override string? Email { get; set; }
 
     [Column("password")]
     public override string? PasswordHash { get; set; }
     
     [Column(TypeName="datetimeoffset")]
-    public required DateTimeOffset LastUpdateDate { get; init; }
+    public DateTimeOffset LastUpdateDate { get; init; }
 
     [NotMapped]
     public override string? NormalizedUserName { get; set; }

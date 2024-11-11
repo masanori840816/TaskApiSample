@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskApiSample;
-using TaskApiSample.AppUsers;
 using TaskApiSample.AppUsers.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationBuilder();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OurTaskContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("OurTasks")));
@@ -31,5 +31,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapIdentityApi<AppUser>();
 app.MapControllers();
 app.Run();
