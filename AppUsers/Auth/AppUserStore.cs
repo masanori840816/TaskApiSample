@@ -7,8 +7,6 @@ namespace TaskApiSample.AppUsers.Auth;
 
 public class AppUserStore(OurTaskContext context) : IUserPasswordStore<AppUser>
 {
-    private readonly OurTaskContext context = context;
-
     public async Task<IdentityResult> CreateAsync(AppUser user, CancellationToken cancellationToken)
     {
         string validationError = user.Validate();
@@ -28,65 +26,121 @@ public class AppUserStore(OurTaskContext context) : IUserPasswordStore<AppUser>
         return IdentityResult.Success;
     }
 
-    public Task<IdentityResult> DeleteAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> DeleteAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+        AppUser? target = await context.AppUsers
+                .FirstOrDefaultAsync(u => u.Id == user.Id,
+                cancellationToken);
+        if(target == null)
+        {
+            return IdentityResult.Success;
+        }
+        context.AppUsers.Remove(target);
+        await context.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        return IdentityResult.Success;
     }
 
     public void Dispose() { /* do nothing */ }
 
-    public Task<AppUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
+    public async Task<AppUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        if(int.TryParse(userId, out var id) == false)
+        {
+            return null;
+        }
+        return await context.AppUsers
+            .FirstOrDefaultAsync(u => u.Id == id,
+            cancellationToken);
     }
 
-    public Task<AppUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+    public async Task<AppUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await context.AppUsers
+                .FirstOrDefaultAsync(u => string.IsNullOrEmpty(u.UserName) == false && u.UserName == normalizedUserName,
+                cancellationToken);
     }
 
-    public Task<string?> GetNormalizedUserNameAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<string?> GetNormalizedUserNameAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(user.NormalizedUserName);
     }
 
-    public Task<string?> GetPasswordHashAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<string?> GetPasswordHashAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(user.PasswordHash);
     }
 
-    public Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(user.Id.ToString());
     }
 
-    public Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(user.UserName);
     }
 
-    public Task<bool> HasPasswordAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<bool> HasPasswordAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await Task.FromResult(true);
     }
 
-    public Task SetNormalizedUserNameAsync(AppUser user, string? normalizedName, CancellationToken cancellationToken)
+    public async Task SetNormalizedUserNameAsync(AppUser user, string? normalizedName, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        // do nothing
+        await Task.Run(() => {}, cancellationToken);
     }
 
-    public Task SetPasswordHashAsync(AppUser user, string? passwordHash, CancellationToken cancellationToken)
+    public async Task SetPasswordHashAsync(AppUser user, string? passwordHash, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+        AppUser? target = await context.AppUsers
+                .FirstOrDefaultAsync(u => u.Id == user.Id,
+                cancellationToken);
+        if(target == null)
+        {
+            return;
+        }
+        target.UpdatePassword(passwordHash);
+        await context.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
     }
 
-    public Task SetUserNameAsync(AppUser user, string? userName, CancellationToken cancellationToken)
+    public async Task SetUserNameAsync(AppUser user, string? userName, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+        AppUser? target = await context.AppUsers
+                .FirstOrDefaultAsync(u => u.Id == user.Id,
+                cancellationToken);
+        if(target == null)
+        {
+            return;
+        }        
+        target.UpdatePassword(userName);
+        await context.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
     }
 
-    public Task<IdentityResult> UpdateAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> UpdateAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        string validationError = user.Validate();
+        if(string.IsNullOrEmpty(validationError) == false)
+        {
+            return IdentityResult.Failed(new IdentityError { Description = validationError });
+        }
+        using IDbContextTransaction transaction = await context.Database.BeginTransactionAsync(cancellationToken);
+        AppUser? target = await context.AppUsers
+                .FirstOrDefaultAsync(u => u.Id == user.Id,
+                cancellationToken);
+        if(target == null)
+        {
+            return IdentityResult.Failed([new IdentityError{ Description = "User was not found" }]);
+        }
+        target.Update(user);
+        await context.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        return IdentityResult.Success;
     }
 }

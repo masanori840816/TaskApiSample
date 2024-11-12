@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskApiSample;
+using TaskApiSample.AppUsers.Auth;
 using TaskApiSample.AppUsers.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,15 +23,17 @@ builder.Services.AddCors(options =>
             });
     });
 builder.Services.AddIdentity<AppUser, IdentityRole<long>>()
+                .AddUserStore<AppUserStore>()
                 .AddEntityFrameworkStores<OurTaskContext>()
                 .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
 app.UseCors(AllowedOrigins);
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapIdentityApi<AppUser>();
+//app.MapIdentityApi<AppUser>();
 app.MapControllers();
 app.Run();

@@ -26,12 +26,26 @@ public class AppUser: IdentityUser<long>
     public override string? PasswordHash { get; set; }
     
     [Column(TypeName="datetimeoffset")]
-    public DateTimeOffset LastUpdateDate { get; init; }
+    public DateTimeOffset LastUpdateDate { get; set; }
 
     [NotMapped]
-    public override string? NormalizedUserName { get; set; }
+    public override string? NormalizedUserName
+    {
+        get
+        {
+            return UserName?.ToUpper();
+        }
+        set { /* DO nothing*/ }
+    }
     [NotMapped]
-    public override string? NormalizedEmail { get; set; }
+    public override string? NormalizedEmail
+    {
+        get
+        {
+            return Email?.ToUpper();
+        }
+        set { /* DO nothing*/ }
+    }
 
     [NotMapped]
     [PersonalData]
@@ -91,5 +105,22 @@ public class AppUser: IdentityUser<long>
         newUser.PasswordHash = new PasswordHasher<AppUser>()
                 .HashPassword(newUser, user.Password);
         return newUser;
+    }
+    public void UpdateUserName(string? userName)
+    {
+        this.UserName = userName;
+        this.LastUpdateDate = DateTime.Now;
+    }
+    public void UpdatePassword(string? passwordHash)
+    {
+        this.PasswordHash = passwordHash;
+        this.LastUpdateDate = DateTime.Now;
+    }
+    public void Update(AppUser user)
+    {
+        this.UserName = user.UserName;
+        this.Email = user.Email;
+        this.PasswordHash = user.PasswordHash;
+        this.LastUpdateDate = DateTime.Now;
     }
 }

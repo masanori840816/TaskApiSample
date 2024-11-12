@@ -1,13 +1,17 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TaskApiSample.AppUsers.Auth;
 using TaskApiSample.AppUsers.DTO;
 
 namespace TaskApiSample.AppUsers;
 
-public class AppUsersController : Controller
+public class AppUsersController(IAuthService auth) : Controller
 {
-    public AppUsersController(IConfiguration config)
+    [HttpGet("/appusers/sample")]
+    public async Task<IdentityResult> CreateSampleUser()
     {
-        Console.WriteLine(config.GetConnectionString("OurTasks"));
+        RegistrationAppUser sampleUser = new(null, "Sample", "sample@example.com", "sample");
+        return await auth.CreateUserAsync(sampleUser);
     }
     [HttpGet("/appusers")]
     public IActionResult GetLoginUser()
