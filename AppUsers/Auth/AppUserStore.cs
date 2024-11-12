@@ -46,6 +46,7 @@ public class AppUserStore(OurTaskContext context) : IUserPasswordStore<AppUser>
 
     public async Task<AppUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"FindByIdAsync");
         if(int.TryParse(userId, out var id) == false)
         {
             return null;
@@ -57,28 +58,33 @@ public class AppUserStore(OurTaskContext context) : IUserPasswordStore<AppUser>
 
     public async Task<AppUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
+        // Use e-mail
         return await context.AppUsers
-                .FirstOrDefaultAsync(u => string.IsNullOrEmpty(u.UserName) == false && u.UserName == normalizedUserName,
+                .FirstOrDefaultAsync(u => string.IsNullOrEmpty(u.Email) == false && u.Email == normalizedUserName,
                 cancellationToken);
     }
 
     public async Task<string?> GetNormalizedUserNameAsync(AppUser user, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"GetNormalizedUserNameAsync");
         return await Task.FromResult(user.NormalizedUserName);
     }
 
     public async Task<string?> GetPasswordHashAsync(AppUser user, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"GetPasswordHashAsync");
         return await Task.FromResult(user.PasswordHash);
     }
 
     public async Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"GetUserIdAsync");
         return await Task.FromResult(user.Id.ToString());
     }
 
     public async Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"GetUserNameAsync");
         return await Task.FromResult(user.UserName);
     }
 

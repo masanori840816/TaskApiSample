@@ -25,7 +25,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddIdentity<AppUser, IdentityRole<long>>()
                 .AddUserStore<AppUserStore>()
                 .AddEntityFrameworkStores<OurTaskContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddApiEndpoints();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
@@ -34,6 +35,6 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-//app.MapIdentityApi<AppUser>();
+app.MapGroup("/account").MapIdentityApi<AppUser>();
 app.MapControllers();
 app.Run();
