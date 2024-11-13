@@ -21,4 +21,10 @@ public class AppUsersController(IAuthService auth) : Controller
         var user = new DisplayAppUser("Masanori");
         return Json(user);
     }
+    [Authorize]
+    [HttpPost("/account/logout")]
+    public async Task<IResult> Logout()
+    {
+        return await auth.LogoutAsync();
+    }
 }

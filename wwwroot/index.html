@@ -5,27 +5,39 @@
         <meta charset="utf-8">
     </head>
     <body>
+        <button onclick="logout()">Logout</button>
         <script>
             fetch("http://localhost:5155/account/login?useCookies=true", {
-            mode: "cors",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: "sample@example.com", password: "sample" }),
-        })
-        .then(res => {
-            if(res.ok) {
-                console.log("OK");
+                    mode: "cors",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: "sample@example.com", password: "sample" }),
+                })
+                .then(res => {
+                    if(res.ok) {
+                        console.log("OK");
+                    }
+                    return fetch("http://localhost:5155/appusers", {
+                        mode: "cors",
+                        method: "GET",
+                    });
+                })
+                .then(res => res.json())
+                .then(res => console.log(res))
+                .catch(err => console.error(err));
+            function logout() {
+                fetch("http://localhost:5155/account/logout", {
+                    mode: "cors",
+                    method: "POST"
+                }).then(res => {
+                    if(res.ok) {
+                        console.log("OK");
+                    }
+                })
+                .catch(err => console.error(err));
             }
-            return fetch("http://localhost:5155/appusers", {
-                mode: "cors",
-                method: "GET",
-            });
-        })
-        .then(res => res.json())
-        .then(res => console.log(res))
-        .catch(err => console.error(err));
             </script>
     </body>
 </html>
