@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskApiSample.AppUsers.Auth;
@@ -13,6 +14,7 @@ public class AppUsersController(IAuthService auth) : Controller
         RegistrationAppUser sampleUser = new(null, "Sample", "sample@example.com", "sample");
         return await auth.CreateUserAsync(sampleUser);
     }
+    [Authorize]
     [HttpGet("/appusers")]
     public IActionResult GetLoginUser()
     {
