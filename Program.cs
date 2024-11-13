@@ -11,13 +11,15 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<OurTaskContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("OurTasks")));
 
+// CORS
+string[] origins = builder.Configuration.GetSection("Origins").Get<string[]>() ?? [];
 const string AllowedOrigins = "AllowedOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(AllowedOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost:5173", "http://localhost:5155")
+            builder.WithOrigins(origins)
                     .AllowAnyHeader()
                     .AllowAnyMethod();
         });
