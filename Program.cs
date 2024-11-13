@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskApiSample;
 using TaskApiSample.AppUsers.Auth;
@@ -6,10 +5,9 @@ using TaskApiSample.AppUsers.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthorization();
-builder.Services.AddAuthorizationBuilder();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<OurTaskContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("OurTasks")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("OurTasks")));
 
 const string AllowedOrigins = "AllowedOrigins";
 builder.Services.AddCors(options =>
@@ -22,13 +20,12 @@ builder.Services.AddCors(options =>
                        .AllowAnyMethod(); // メソッドの許可
             });
     });
-builder.Services.AddIdentity<AppUser, IdentityRole<long>>()
-                .AddUserStore<AppUserStore>()
-                .AddEntityFrameworkStores<OurTaskContext>()
-                .AddDefaultTokenProviders()
-                .AddApiEndpoints();
 
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+    .AddUserStore<AppUserStore>()
+    .AddEntityFrameworkStores<OurTaskContext>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
 var app = builder.Build();
 app.UseCors(AllowedOrigins);
 app.UseStaticFiles();
