@@ -31,10 +31,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 app.UseCors(AllowedOrigins);
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapStaticAssets();
 app.MapGroup("/account").MapIdentityApi<AppUser>();
 app.MapControllers();
 app.Run();
