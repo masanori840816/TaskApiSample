@@ -1,12 +1,12 @@
-import { useContext, useEffect } from "react"
-import "./Index.page.css";
-import { AppUserContext } from "./users/appUserContext"
-
-export function IndexPage(): JSX.Element {
-    const appUsers = useContext(AppUserContext);
-    useEffect(() => {
-        console.log("indexpage ");
-        fetch("http://localhost:5155/account/login?useCookies=true", {
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sample</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <script>
+            fetch("http://localhost:5155/account/login?useCookies=true", {
             mode: "cors",
             method: "POST",
             headers: {
@@ -26,9 +26,6 @@ export function IndexPage(): JSX.Element {
         .then(res => res.json())
         .then(res => console.log(res))
         .catch(err => console.error(err));
-    }, []);
-    return <div>
-        <h1>Hello World!</h1>
-        <div>{appUsers?.name ?? ""}</div>
-    </div>
-}
+            </script>
+    </body>
+</html>
